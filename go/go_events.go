@@ -36,6 +36,8 @@ func addEvent(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Post(stateUrl, "application/json", bytes.NewBuffer(state))
 	if err != nil {
 		log.Fatalln("Error posting to state", err)
+		http.Error(w, "Failed to write to store", http.StatusServiceUnavailable)
 	}
 	log.Printf("Response after posting to state: %s", resp)
+	http.Error(w, "All Okay", http.StatusOK)
 }
