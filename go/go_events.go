@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -40,4 +41,23 @@ func addEvent(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("Response after posting to state: %s", resp)
 	http.Error(w, "All Okay", http.StatusOK)
+}
+
+func deleteEvent(w http.ResponseWriter, r *http.Request) {
+	var id string
+	json.NewDecoder(r.Body).Decode(&id)
+
+	deleteUrl := stateUrl + "/" + id
+
+	req, err := http.NewRequest(http.MethodDelete, deleteUrl, nil)
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalln("Error deleting event", err)
+	}
+
+	defer resp.Body.Close()
+	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+
+	log.Printf(string(bodyBytes))
 }
