@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/gorilla/mux"
 )
 
 var daprPort = os.Getenv("DAPR_HTTP_PORT")
@@ -18,21 +20,23 @@ var stateURL = fmt.Sprintf(`http://localhost:%s/v1.0/state/%s`, daprPort, stateS
 
 // Event represents an event, be it meetings, birthdays etc
 type Event struct {
-	name string
-	date string
-	id   string
+	Name string
+	Date string
+	ID   string
 }
 
 func addEvent(w http.ResponseWriter, r *http.Request) {
 	var event Event
-	json.NewDecoder(r.Body).Decode(&event)
-	log.Printf("Event Name: %s", event.name)
-	log.Printf("Event Date: %s", event.date)
-	log.Printf("Event ID: %s", event.id)
+
+	err := json.NewDecoder(r.Body).Decode(&event)
+	log.Printf("Error while decoding", err)
+	log.Printf("Event Name: %s", event.Name)
+	log.Printf("Event Date: %s", event.Date)
+	log.Printf("Event ID: %s", event.ID)
 
 	state, _ := json.Marshal(map[string]string{
-		"key":   event.id,
-		"value": event.name + " " + event.date,
+		"key":   event.ID,
+		"value": event.Name + " " + event.Date,
 	})
 
 	resp, err := http.Post(stateURL, "application/json", bytes.NewBuffer(state))
@@ -61,4 +65,12 @@ func deleteEvent(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 
 	log.Printf(string(bodyBytes))
+}
+
+func main() {
+	router := mux.NewRouter()
+
+	router.HandleFunc("/addEvent", addEvent).Methods("POST")
+	router.HandleFunc("/deleteEvent", deleteEvent).Methods("POST")
+	log.Fatal(http.ListenAndServe(":6000", router))
 }
