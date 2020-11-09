@@ -1,10 +1,10 @@
 
-import express from 'express';
-import { json } from 'body-parser';
-import 'isomorphic-fetch';
+const express = require('express');
+const bodyParser = require('body-parser');
+require('isomorphic-fetch');
 
 const app = express();
-app.use(json());
+app.use(bodyParser.json());
 
 const daprPort = process.env.DAPR_HTTP_PORT || 3500;
 const eventApp = `go-events`;
