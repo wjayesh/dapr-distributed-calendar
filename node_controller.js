@@ -16,6 +16,7 @@ app.post('/newevent', (req, res) => {
     const eventId = data.id;
     console.log("New event registration! Event ID: " + eventId);
 
+    console.log("Data passed as body to Go", JSON.stringify(data))
     fetch(invokeUrl+`/addEvent`, {
         method: "POST",
         body: JSON.stringify(data),
