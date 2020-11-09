@@ -34,25 +34,34 @@ func addEvent(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Event Date: %s", event.Date)
 	log.Printf("Event ID: %s", event.ID)
 
-	state, _ := json.Marshal(map[string]string{
+	var data = make([]map[string]string, 1)
+	data[0] = map[string]string{
 		"key":   event.ID,
 		"value": event.Name + " " + event.Date,
-	})
+	}
+	state, _ := json.Marshal(data)
+	log.Printf(string(state))
 
 	resp, err := http.Post(stateURL, "application/json", bytes.NewBuffer(state))
 	if err != nil {
 		log.Fatalln("Error posting to state", err)
 		http.Error(w, "Failed to write to store", http.StatusServiceUnavailable)
 	}
-	log.Printf("Response after posting to state: %s", string(resp.Status))
+	log.Printf("Response after posting to state: %s", resp.Status)
 	http.Error(w, "All Okay", http.StatusOK)
 }
 
 func deleteEvent(w http.ResponseWriter, r *http.Request) {
-	var id string
-	json.NewDecoder(r.Body).Decode(&id)
+	type Identity struct {
+		ID string
+	}
+	var eventID Identity
 
-	deleteURL := stateURL + "/" + id
+	err := json.NewDecoder(r.Body).Decode(&eventID)
+	log.Printf("Error decoding id")
+
+	deleteURL := stateURL + "/" + eventID.ID
+	log.Printf("Delete URL: ", deleteURL)
 
 	req, err := http.NewRequest(http.MethodDelete, deleteURL, nil)
 	client := &http.Client{}
@@ -60,6 +69,7 @@ func deleteEvent(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalln("Error deleting event", err)
 	}
+	log.Printf("Response after delete call: ", resp.Status)
 
 	defer resp.Body.Close()
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)

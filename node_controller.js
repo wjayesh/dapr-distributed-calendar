@@ -40,8 +40,9 @@ app.delete('/event/:id', (req, res) => {
     const key = req.params.id;      
     console.log('Invoke Delete for ID ' + key);         
 
-    var obj = {id : key};
-    fetch(invokeUrl+'deleteEvent', {
+    var obj = {"id" : key};
+    console.log("Data passed as body to Go", JSON.stringify(obj))
+    fetch(invokeUrl+'/deleteEvent', {
         method: "POST",  
         body: JSON.stringify(obj),  
         headers: {
