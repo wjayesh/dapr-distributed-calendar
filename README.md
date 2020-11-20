@@ -22,7 +22,7 @@ I wanted to find out how Dapr simplified this process and what additional work I
 
 I have tried to model this system on the Model View Controller Service (MVCS) architecture, as already mentioned. 
 
-* Controller, written in **Javascript**: 
+### Controller (written in *Javascript*): 
 
   * The controller supports creation of new events and deletion of existing events. 
     It forwards these requests to the **Go** code using service invocation.
