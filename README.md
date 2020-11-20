@@ -23,3 +23,52 @@ I wanted to find out how Dapr simplified this process and what additional work I
 I have tried to model this system on the Model View Controller Service (MVCS) architecture, as already mentioned. 
 
 * Controller, written in **Javascript**: 
+
+  * The controller supports creation of new events and deletion of existing events. 
+    It forwards these requests to the **Go** code using service invocation.
+  
+    *Shown below is the add event flow*. 
+  
+    ```js
+    app.post('/newevent', (req, res) => {
+    const data = req.body.data;
+    const eventId = data.id;
+    console.log("New event registration! Event ID: " + eventId);
+
+
+    console.log("Data passed as body to Go", JSON.stringify(data))
+    fetch(invokeUrl+`/addEvent`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    ```
+    where the invokeURL is defined as:
+    ```js
+    const invokeUrl = `http://localhost:${daprPort}/v1.0/invoke/${eventApp}/method`;
+    ```
+  
+  
+  * On creation of a new event, it publishes a message to a **pubsub** topic which is then picked up by the **Python** subscriber. 
+  
+    *Pubishing to the topic*
+  
+    ```js
+    function send_notif(data) {
+      var message = {
+          "data": {
+              "message": data,
+          }
+      };
+      console.log("Message: ", message)
+      request( { uri: publishUrl, method: 'POST', json: JSON.stringify(message) } );
+    }
+    ```
+    where the publish URL is:
+    ```js
+    const publishUrl = `http://localhost:${daprPort}/v1.0/publish/${pubsub_name}/${topic}`;
+    ```
+
+
