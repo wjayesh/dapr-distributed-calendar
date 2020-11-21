@@ -2,7 +2,18 @@
 
 This is a sample application built using Dapr as a proof-of-concept. I have experimented with the state store, pubsub and output bindings features available with Dapr.
 I have used multiple languages for writing the different parts of this calendar app. This demonstrates the language-agnostic nature of Dapr and the flexibility that it bings to developing
-applications. 
+applications.
+
+## Contents
+
+* [**Motivation**](https://github.com/wjayesh/dapr-distributed-calendar#motivation)
+
+* [**Architecture**](https://github.com/wjayesh/dapr-distributed-calendar#architecture)
+  * [**Controller**](https://github.com/wjayesh/dapr-distributed-calendar#controller-written-in-javascript)
+  * [**Services**](https://github.com/wjayesh/dapr-distributed-calendar#services)
+
+* [**How to run**]() (*pending*)
+
 
 ## Motivation
 
