@@ -33,6 +33,10 @@ I wanted to find out how Dapr simplified this process and what additional work I
 
 I have tried to model this system on the Model View Controller Service (MVCS) architecture, as already mentioned. 
 
+
+![Diagram](https://user-images.githubusercontent.com/37150991/100470841-07c3d380-30ff-11eb-855c-711026ad4804.png)
+
+
 ### Controller (written in Javascript)
 
   * The controller supports creation of new events and deletion of existing events. 
