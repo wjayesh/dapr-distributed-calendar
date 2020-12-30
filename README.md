@@ -201,7 +201,7 @@ go build go_events.go
 3) Run Dapr
 
 ```
-dapr run --app-id events --app-port 6000 --dapr-http-port 3503 ./go-events
+dapr run --app-id go-events --app-port 6000 --dapr-http-port 3503 ./go-events
 ```
 
 ### Python
