@@ -12,7 +12,9 @@ applications.
   * [**Controller**](https://github.com/wjayesh/dapr-distributed-calendar#controller-written-in-javascript)
   * [**Services**](https://github.com/wjayesh/dapr-distributed-calendar#services)
 
-* [**How to run**]() (*pending*)
+* [**How to run**]()
+
+* [**Test using Postman**]()
 
 
 ## Motivation
@@ -174,4 +176,99 @@ a different language. I'll detail the implementation below.
   
   where invoke_binding is a library function from the Dapr client. In the previous cases, we had called the endpoints directly; here we 
   use a function already implemented for us.
+
+
+## How to Run
+
+The project has three different apps, in Go, Python and Node. We have to build them and then utilise the `dapr run` command to start these apps.
+
+First, make sure that your component definitions are present under `$HOME/.dapr/components` if you're on Linux and under `%USERPROFILE%\.dapr\components` if you're using Windows. This is because the `dapr run` command makes use of the yaml definitions provided here at runtime. 
+ 
+You can find the component definitions I've used in this project under `components` of the root directory. The password and api keys have been removed and will need to be provided at runtime. In Kubernetes, you can make use of Secrets for these values. Check out [secret stores](https://docs.dapr.io/developing-applications/building-blocks/secrets/secrets-overview/) component of Dapr!
+
+After the components are created with the correct fields, we can build and run the individual apps.
+
+### Go
+
+1) Go inside the `go` directory and build the project Make sure you have `gorilla/mux`  package installed. If not, run the following command:
+
+```
+go get -u github.com/gorilla/mux
+```
+2) Build the app.
+
+```
+go build go_events.go
+```
+3) Run Dapr
+
+```
+dapr run --app-id go-events --app-port 6000 --dapr-http-port 3503 ./go-events
+```
+
+### Python
+
+1) Install required dependencies. 
+
+```
+pip3 install wheel python-dotenv flask_cors flask
+```
+
+2) Set environment variable for Flask.
+
+```bash
+#Linux/Mac OS:
+export FLASK_RUN_PORT=5000
+
+#Windows:
+set FLASK_RUN_PORT=5000
+```
+
+3) Start Dapr.
+
+```
+dapr run --app-id messages --app-port 5000 --dapr-http-port 3501 flask run
+```
+
+### Node
+
+1) Install dependencies.
+
+```
+npm install
+```
+
+2) Start Dapr.
+
+```
+dapr run --app-id controller --app-port 3000 --dapr-http-port 3500 node node_controller.js
+```
+
+## Test Using Postman
+
+### Posting a new event to the controller:
+
+  * Postman client used to send request body at "/newevent" endpoint.
+    <img width="960" alt="Postman_xZToyg3V5V" src="https://user-images.githubusercontent.com/37150991/103376151-decd9e80-4b01-11eb-899e-526077298036.png">
+
+  * The Dapr logs inside the **controller** showing the data that is being passed to the Go app for persisting in storage. 
+
+    <img width="723" alt="Code_q47W3rzXWh" src="https://user-images.githubusercontent.com/37150991/103376099-bcd41c00-4b01-11eb-962d-381dada3b8d4.png">
+
+  * The Dapr logs inside the **go-events** app showing the data received along with the status response. 
+
+    <img width="731" alt="Code_ofFsZ9hUTU" src="https://user-images.githubusercontent.com/37150991/103376139-d5443680-4b01-11eb-98e8-8ae83fc2c5dd.png">
+
+
+
+### Invoking the state endpoint to test statestore feature:
+
+  * Posting to the **events** statestore, a body with a key-value pair as shown. 
+
+    <img width="960" alt="Postman_vOcZin57HI" src="https://user-images.githubusercontent.com/37150991/103376192-fc9b0380-4b01-11eb-8aae-3dbf2e744672.png">
+
+  * Checking the value of key at the events statestore.
+
+    <img width="960" alt="Postman_BLqZjqVt5x" src="https://user-images.githubusercontent.com/37150991/103376177-ed1bba80-4b01-11eb-9be7-012d0d9ed324.png">
+
 
