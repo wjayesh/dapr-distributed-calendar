@@ -12,7 +12,9 @@ applications.
   * [**Controller**](https://github.com/wjayesh/dapr-distributed-calendar#controller-written-in-javascript)
   * [**Services**](https://github.com/wjayesh/dapr-distributed-calendar#services)
 
-* [**How to run**]() (*pending*)
+* [**How to run**]()
+
+* [**Test using Postman**]()
 
 
 ## Motivation
@@ -241,4 +243,32 @@ npm install
 ```
 dapr run --app-id controller --app-port 3000 --dapr-http-port 3500 node node_controller.js
 ```
+
+## Test Using Postman
+
+### Posting a new event to the controller:
+
+  * Postman client used to send request body at "/newevent" endpoint.
+    <img width="960" alt="Postman_xZToyg3V5V" src="https://user-images.githubusercontent.com/37150991/103376151-decd9e80-4b01-11eb-899e-526077298036.png">
+
+  * The Dapr logs inside the **controller** showing the data that is being passed to the Go app for persisting in storage. 
+
+    <img width="723" alt="Code_q47W3rzXWh" src="https://user-images.githubusercontent.com/37150991/103376099-bcd41c00-4b01-11eb-962d-381dada3b8d4.png">
+
+  * The Dapr logs inside the **go-events** app showing the data received along with the status response. 
+
+    <img width="731" alt="Code_ofFsZ9hUTU" src="https://user-images.githubusercontent.com/37150991/103376139-d5443680-4b01-11eb-98e8-8ae83fc2c5dd.png">
+
+
+
+### Invoking the state endpoint to test statestore feature:
+
+  * Posting to the **events** statestore, a body with a key-value pair as shown. 
+
+    <img width="960" alt="Postman_vOcZin57HI" src="https://user-images.githubusercontent.com/37150991/103376192-fc9b0380-4b01-11eb-8aae-3dbf2e744672.png">
+
+  * Checking the value of key at the events statestore.
+
+    <img width="960" alt="Postman_BLqZjqVt5x" src="https://user-images.githubusercontent.com/37150991/103376177-ed1bba80-4b01-11eb-9be7-012d0d9ed324.png">
+
 
