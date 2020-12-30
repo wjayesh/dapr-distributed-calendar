@@ -12,9 +12,9 @@ applications.
   * [**Controller**](https://github.com/wjayesh/dapr-distributed-calendar#controller-written-in-javascript)
   * [**Services**](https://github.com/wjayesh/dapr-distributed-calendar#services)
 
-* [**How to run**]()
+* [**How to run**](https://github.com/wjayesh/dapr-distributed-calendar#how-to-run)
 
-* [**Test using Postman**]()
+* [**Test using Postman**](https://github.com/wjayesh/dapr-distributed-calendar#test-using-postman)
 
 
 ## Motivation
