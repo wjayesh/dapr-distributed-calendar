@@ -146,7 +146,7 @@ a different language. I'll detail the implementation below.
     print(request.json, flush=True)
     
     jsonRequest = request.json
-    data = jsonRequest["data"]["message"]
+    data = jsonRequest["data"]["data"]["message"]
     print(data, flush=True)
     
     send_email()
