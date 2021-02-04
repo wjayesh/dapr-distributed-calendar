@@ -211,7 +211,7 @@ dapr run --app-id go-events --app-port 6000 --dapr-http-port 3503 ./go-events
 1) Install required dependencies. 
 
 ```
-pip3 install wheel python-dotenv flask_cors flask
+pip3 install wheel python-dotenv flask_cors flask dapr
 ```
 
 2) Set environment variable for Flask.
